@@ -2,7 +2,7 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2002-2018 by Hitachi Vantara : http://www.pentaho.com
+ * Copyright (C) 2002-2019 by Hitachi Vantara : http://www.pentaho.com
  *
  *******************************************************************************
  *
@@ -22,16 +22,7 @@
 
 package org.pentaho.di.trans.steps.dimensionlookup;
 
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-
 import org.pentaho.di.core.Const;
-import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.database.Database;
 import org.pentaho.di.core.database.DatabaseMeta;
@@ -47,6 +38,7 @@ import org.pentaho.di.core.row.value.ValueMetaBoolean;
 import org.pentaho.di.core.row.value.ValueMetaDate;
 import org.pentaho.di.core.row.value.ValueMetaFactory;
 import org.pentaho.di.core.row.value.ValueMetaInteger;
+import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.trans.Trans;
 import org.pentaho.di.trans.TransMeta;
@@ -55,6 +47,14 @@ import org.pentaho.di.trans.step.StepDataInterface;
 import org.pentaho.di.trans.step.StepInterface;
 import org.pentaho.di.trans.step.StepMeta;
 import org.pentaho.di.trans.step.StepMetaInterface;
+
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Manages a slowly changing dimension (lookup or update)
@@ -334,7 +334,7 @@ public class DimensionLookup extends BaseStep implements StepInterface {
     }
   }
 
-  private synchronized Object[] lookupValues( RowMetaInterface rowMeta, Object[] row ) throws KettleException {
+  synchronized Object[] lookupValues( RowMetaInterface rowMeta, Object[] row ) throws KettleException {
     Object[] outputRow = new Object[ data.outputRowMeta.size() ];
 
     RowMetaInterface lookupRowMeta;
@@ -468,6 +468,9 @@ public class DimensionLookup extends BaseStep implements StepInterface {
         if ( meta.getCacheSize() >= 0 ) { // need -oo to +oo as well...
           returnRow[ returnRow.length - 2 ] = data.min_date;
           returnRow[ returnRow.length - 1 ] = data.max_date;
+          if (!meta.isPreloadingCache()) {
+            addToCache( lookupRow, returnRow );
+          }
         }
       }
       // else {
@@ -1519,7 +1522,7 @@ public class DimensionLookup extends BaseStep implements StepInterface {
 
     // store it in the cache if needed.
     byte[] keyPart = RowMeta.extractData( data.cacheKeyRowMeta, keyValues );
-    byte[] valuePart = RowMeta.extractData( data.cacheValueRowMeta, returnValues );
+    byte[] valuePart = returnValues == null ? null : RowMeta.extractData( data.cacheValueRowMeta, returnValues );
     data.cache.put( keyPart, valuePart );
 
     // check if the size is not too big...
