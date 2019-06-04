@@ -116,6 +116,9 @@ public class DimensionLookup extends BaseStep implements StepInterface {
 
     Object[] r = getRow(); // Get row from input rowset & set row busy!
     if ( r == null ) { // no more input to be expected...
+      if ( getLinesInput() == 0 && getCopy() == 0 ) {
+        checkDimZero();
+      }
 
       setOutputDone(); // signal end to receiver(s)
       return false;
@@ -123,9 +126,6 @@ public class DimensionLookup extends BaseStep implements StepInterface {
 
     if ( first ) {
       first = false;
-
-      data.schemaTable =
-        meta.getDatabaseMeta().getQuotedSchemaTableCombination( data.realSchemaName, data.realTableName );
 
       data.inputRowMeta = getInputRowMeta().clone();
       data.outputRowMeta = getInputRowMeta().clone();
@@ -1708,6 +1708,8 @@ public class DimensionLookup extends BaseStep implements StepInterface {
 
       data.realSchemaName = environmentSubstitute( meta.getSchemaName() );
       data.realTableName = environmentSubstitute( meta.getTableName() );
+      data.schemaTable =
+        meta.getDatabaseMeta().getQuotedSchemaTableCombination( data.realSchemaName, data.realTableName );
 
       data.startDateChoice = DimensionLookupMeta.START_DATE_ALTERNATIVE_NONE;
       if ( meta.isUsingStartDateAlternative() ) {
