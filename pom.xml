@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.pentaho.di</groupId>
   <artifactId>pdi</artifactId>
-  <version>9.3.0.0-428</version>
+  <version>9.3.0.0-428-1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Pentaho Data Integration</name>
@@ -35,13 +33,13 @@
       <name>GNU Lesser General Public License, Version 2.1</name>
       <url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
       <distribution>repo</distribution>
-      <comments></comments>
+      <comments />
     </license>
     <license>
       <name>GNU Lesser General Public License, Version 3.0</name>
       <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
       <distribution>repo</distribution>
-      <comments></comments>
+      <comments />
     </license>
   </licenses>
 
@@ -55,6 +53,7 @@
     <!-- Pentaho dependencies -->
     <commons-xul.version>9.3.0.0-428</commons-xul.version>
     <pentaho-metastore.version>9.3.0.0-428</pentaho-metastore.version>
+    <pentaho-platform.version>9.3.0.0-428</pentaho-platform.version>
 
     <!-- Third-party dependencies -->
     <org.eclipse.swt.version>4.6</org.eclipse.swt.version>
@@ -236,6 +235,15 @@
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -250,6 +258,7 @@
             <user.timezone>UTC</user.timezone>
             <file.encoding>UTF-8</file.encoding>
             <java.locale.providers>COMPAT,SPI</java.locale.providers>
+            <log4j2.disable.jmx>true</log4j2.disable.jmx>
           </systemPropertyVariables>
         </configuration>
       </plugin>
@@ -282,9 +291,10 @@
         <module>engine</module>
         <module>dbdialog</module>
         <module>ui</module>
-        <module>utilities</module>
+<!--        <module>utilities</module>-->
       </modules>
     </profile>
+<!--
     <profile>
       <id>plugins</id>
       <activation>
@@ -307,6 +317,7 @@
         <module>assemblies</module>
       </modules>
     </profile>
+-->
   </profiles>
 
 
