@@ -22,26 +22,11 @@
 
 package org.pentaho.di.trans.steps.dimensionlookup;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
-
-import org.pentaho.di.core.CheckResult;
-import org.pentaho.di.core.CheckResultInterface;
-import org.pentaho.di.core.Const;
-import org.pentaho.di.core.injection.AfterInjection;
-import org.pentaho.di.core.util.Utils;
-import org.pentaho.di.core.ProvidesModelerMeta;
-import org.pentaho.di.core.SQLStatement;
+import org.pentaho.di.core.*;
 import org.pentaho.di.core.database.Database;
 import org.pentaho.di.core.database.DatabaseMeta;
-import org.pentaho.di.core.exception.KettleDatabaseException;
-import org.pentaho.di.core.exception.KettleException;
-import org.pentaho.di.core.exception.KettleStepException;
-import org.pentaho.di.core.exception.KettleValueException;
-import org.pentaho.di.core.exception.KettleXMLException;
+import org.pentaho.di.core.exception.*;
+import org.pentaho.di.core.injection.AfterInjection;
 import org.pentaho.di.core.injection.Injection;
 import org.pentaho.di.core.injection.InjectionSupported;
 import org.pentaho.di.core.injection.InjectionTypeConverter;
@@ -52,6 +37,7 @@ import org.pentaho.di.core.row.value.ValueMetaBoolean;
 import org.pentaho.di.core.row.value.ValueMetaDate;
 import org.pentaho.di.core.row.value.ValueMetaFactory;
 import org.pentaho.di.core.row.value.ValueMetaInteger;
+import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.core.xml.XMLHandler;
 import org.pentaho.di.i18n.BaseMessages;
@@ -61,13 +47,11 @@ import org.pentaho.di.shared.SharedObjectInterface;
 import org.pentaho.di.trans.DatabaseImpact;
 import org.pentaho.di.trans.Trans;
 import org.pentaho.di.trans.TransMeta;
-import org.pentaho.di.trans.step.BaseStepMeta;
-import org.pentaho.di.trans.step.StepDataInterface;
-import org.pentaho.di.trans.step.StepInterface;
-import org.pentaho.di.trans.step.StepMeta;
-import org.pentaho.di.trans.step.StepMetaInterface;
+import org.pentaho.di.trans.step.*;
 import org.pentaho.metastore.api.IMetaStore;
 import org.w3c.dom.Node;
+
+import java.util.*;
 
 /**
  * @author Matt
@@ -942,6 +926,9 @@ public class DimensionLookupMeta extends BaseStepMeta implements StepMetaInterfa
         fieldLookup[i] = XMLHandler.getTagValue( fnode, "lookup" );
         upd = XMLHandler.getTagValue( fnode, "update" );
         fieldUpdate[i] = getUpdateType( update, upd );
+        if ( !update ) {
+          returnType[i] = fieldUpdate[i];
+        }
       }
 
       if ( update ) {
