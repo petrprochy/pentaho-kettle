@@ -6,7 +6,7 @@
 
   <groupId>org.pentaho.di</groupId>
   <artifactId>pdi</artifactId>
-  <version>9.4.0.0-343</version>
+  <version>9.4.0.0-343-1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>Pentaho Data Integration</name>
@@ -20,7 +20,7 @@
   </parent>
 
   <scm>
-    <developerConnection>scm:git:git@github.com:pentaho/pentaho-kettle.git</developerConnection>
+    <developerConnection>scm:git:https://github.com/petrprochy/pentaho-kettle.git</developerConnection>
     <tag>HEAD</tag>
   </scm>
 
@@ -55,6 +55,7 @@
     <!-- Pentaho dependencies -->
     <commons-xul.version>9.4.0.0-343</commons-xul.version>
     <pentaho-metastore.version>9.4.0.0-343</pentaho-metastore.version>
+    <pentaho-platform.version>9.4.0.0-343</pentaho-platform.version>
 
     <!-- Third-party dependencies -->
     <org.eclipse.swt.version>4.6</org.eclipse.swt.version>
