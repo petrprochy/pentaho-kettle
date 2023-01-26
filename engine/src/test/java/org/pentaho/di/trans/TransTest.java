@@ -45,6 +45,7 @@ import org.pentaho.di.core.logging.LoggingObjectLifecycleInterface;
 import org.pentaho.di.core.logging.StepLogTable;
 import org.pentaho.di.core.logging.TransLogTable;
 import org.pentaho.di.core.variables.VariableSpace;
+import org.pentaho.di.core.variables.Variables;
 import org.pentaho.di.core.vfs.KettleVFS;
 import org.pentaho.di.junit.rules.RestorePDIEngineEnvironment;
 import org.pentaho.di.repository.Repository;
@@ -236,7 +237,7 @@ public class TransTest {
     when( meta.listVariables() ).thenReturn( new String[] {} );
     when( meta.listParameters() ).thenReturn( new String[] { testParam } );
     when( meta.getParameterValue( testParam ) ).thenReturn( testParamValue );
-    FileObject ktr = KettleVFS.createTempFile( "parameters", ".ktr", "ram://" );
+    FileObject ktr = KettleVFS.createTempFile( "parameters", ".ktr", "ram://", new Variables() );
     try ( OutputStream outputStream = ktr.getContent().getOutputStream( true ) ) {
       InputStream inputStream = new ByteArrayInputStream( "<transformation></transformation>".getBytes() );
       IOUtils.copy( inputStream, outputStream );

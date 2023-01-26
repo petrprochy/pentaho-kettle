@@ -237,6 +237,15 @@
     </dependencies>
   </dependencyManagement>
 
+  <dependencies>
+    <dependency>
+      <groupId>org.slf4j</groupId>
+      <artifactId>slf4j-simple</artifactId>
+      <version>${slf4j.version}</version>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+
   <build>
     <plugins>
       <plugin>
@@ -251,6 +260,7 @@
             <user.timezone>UTC</user.timezone>
             <file.encoding>UTF-8</file.encoding>
             <java.locale.providers>COMPAT,SPI</java.locale.providers>
+            <log4j2.disable.jmx>true</log4j2.disable.jmx>
           </systemPropertyVariables>
         </configuration>
       </plugin>
