@@ -1,17 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.pentaho.di.plugins</groupId>
     <artifactId>pdi-plugins</artifactId>
-    <version>9.4.0.0-343</version>
+    <version>9.4.0.0-343-1-SNAPSHOT</version>
   </parent>
 
   <artifactId>postgresql-db-bulk-loader</artifactId>
-  <version>9.4.0.0-343</version>
+  <version>9.4.0.0-343-1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>PDI PostgreSQL DB Bulk Loader Plugins</name>
@@ -44,19 +42,19 @@
       <dependency>
         <groupId>pentaho-kettle</groupId>
         <artifactId>kettle-engine</artifactId>
-        <version>${pdi.version}</version>
+        <version>${project.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>pentaho-kettle</groupId>
         <artifactId>kettle-core</artifactId>
-        <version>${pdi.version}</version>
+        <version>${project.version}</version>
         <scope>provided</scope>
       </dependency>
       <dependency>
         <groupId>pentaho-kettle</groupId>
         <artifactId>kettle-ui-swt</artifactId>
-        <version>${pdi.version}</version>
+        <version>${project.version}</version>
         <scope>provided</scope>
       </dependency>
 
@@ -89,14 +87,14 @@
       <dependency>
        <groupId>pentaho-kettle</groupId>
        <artifactId>kettle-core</artifactId>
-       <version>${pdi.version}</version>
+       <version>${project.version}</version>
        <classifier>tests</classifier>
        <scope>test</scope>
       </dependency>
       <dependency>
          <groupId>pentaho-kettle</groupId>
          <artifactId>kettle-engine</artifactId>
-         <version>${pdi.version}</version>
+         <version>${project.version}</version>
          <classifier>tests</classifier>
          <scope>test</scope>
        </dependency>

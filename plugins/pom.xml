@@ -5,7 +5,7 @@
 
   <groupId>org.pentaho.di.plugins</groupId>
   <artifactId>pdi-plugins</artifactId>
-  <version>9.4.0.0-343</version>
+  <version>9.4.0.0-343-1-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>PDI Plugins</name>
@@ -13,7 +13,7 @@
   <parent>
     <groupId>org.pentaho.di</groupId>
     <artifactId>pdi</artifactId>
-    <version>9.4.0.0-343</version>
+    <version>9.4.0.0-343-1-SNAPSHOT</version>
   </parent>
 
   <properties>
@@ -94,5 +94,11 @@
       </modules>
     </profile>
 
+    <profile>
+      <id>fix</id>
+      <modules>
+        <module>postgresql-db-bulk-loader</module>
+      </modules>
+    </profile>
   </profiles>
 </project>
