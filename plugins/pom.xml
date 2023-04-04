@@ -97,6 +97,7 @@
     <profile>
       <id>fix</id>
       <modules>
+        <module>pentaho-reporting</module>
         <module>postgresql-db-bulk-loader</module>
       </modules>
     </profile>
