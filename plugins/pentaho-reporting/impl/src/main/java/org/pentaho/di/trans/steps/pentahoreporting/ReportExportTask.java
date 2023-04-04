@@ -22,12 +22,6 @@
 
 package org.pentaho.di.trans.steps.pentahoreporting;
 
-import java.io.BufferedOutputStream;
-import java.io.OutputStream;
-import java.util.Locale;
-import java.util.MissingResourceException;
-import java.util.ResourceBundle;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.commons.vfs2.FileObject;
@@ -40,7 +34,12 @@ import org.pentaho.reporting.engine.classic.core.modules.gui.common.StatusType;
 import org.pentaho.reporting.engine.classic.core.modules.gui.commonswing.SwingGuiContext;
 import org.pentaho.reporting.libraries.base.util.IOUtils;
 import org.pentaho.reporting.libraries.base.util.Messages;
-import org.pentaho.reporting.libraries.base.util.ObjectUtilities;
+
+import java.io.BufferedOutputStream;
+import java.io.OutputStream;
+import java.util.Locale;
+import java.util.MissingResourceException;
+import java.util.ResourceBundle;
 
 public abstract class ReportExportTask implements Runnable {
   protected static final Log logger = LogFactory.getLog( ReportExportTask.class );
@@ -79,9 +78,7 @@ public abstract class ReportExportTask implements Runnable {
       locale = Locale.US;
     }
 
-    this.messages =
-        new Messages( locale, BASE_RESOURCE_CLASS,
-                ObjectUtilities.getClassLoader( ReportExportTask.class ) );
+    this.messages = new Messages( locale, BASE_RESOURCE_CLASS, ReportExportTask.class.getClassLoader() );
 
     this.targetPath = targetPath;
     this.createParentFolder = createParentFolder;
