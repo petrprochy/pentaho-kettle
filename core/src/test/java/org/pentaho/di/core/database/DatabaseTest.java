@@ -2,7 +2,7 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2002-2022 by Hitachi Vantara : http://www.pentaho.com
+ * Copyright (C) 2002-2023 by Hitachi Vantara : http://www.pentaho.com
  *
  *******************************************************************************
  *
@@ -22,50 +22,6 @@
 
 package org.pentaho.di.core.database;
 
-import static org.hamcrest.core.StringContains.containsString;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
-import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.fail;
-import static org.mockito.AdditionalMatchers.or;
-import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyString;
-import static org.mockito.Matchers.eq;
-import static org.mockito.AdditionalMatchers.aryEq;
-import static org.mockito.Matchers.same;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.spy;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
-import java.lang.reflect.Field;
-import java.sql.BatchUpdateException;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.Driver;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.ResultSetMetaData;
-import java.sql.SQLException;
-import java.sql.Types;
-import java.util.List;
-import java.util.Properties;
-
-import javax.naming.Context;
-import javax.naming.InitialContext;
-import javax.naming.NamingException;
-import javax.naming.spi.InitialContextFactoryBuilder;
-import javax.naming.spi.NamingManager;
-import javax.sql.DataSource;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
@@ -76,14 +32,63 @@ import org.pentaho.di.core.KettleClientEnvironment;
 import org.pentaho.di.core.database.DataSourceProviderInterface.DatasourceType;
 import org.pentaho.di.core.exception.KettleDatabaseBatchException;
 import org.pentaho.di.core.exception.KettleDatabaseException;
+import org.pentaho.di.core.exception.KettlePluginException;
 import org.pentaho.di.core.logging.LogLevel;
 import org.pentaho.di.core.logging.LoggingObjectInterface;
+import org.pentaho.di.core.plugins.PluginInterface;
+import org.pentaho.di.core.plugins.PluginRegistry;
 import org.pentaho.di.core.row.RowMetaInterface;
 import org.pentaho.di.core.row.ValueMetaInterface;
 import org.pentaho.di.core.row.value.ValueMetaNumber;
+import org.pentaho.di.core.row.value.ValueMetaPluginType;
 import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.junit.rules.RestorePDIEnvironment;
 import org.springframework.mock.jndi.SimpleNamingContextBuilder;
+
+import javax.naming.Context;
+import javax.naming.InitialContext;
+import javax.naming.NamingException;
+import javax.naming.spi.InitialContextFactoryBuilder;
+import javax.naming.spi.NamingManager;
+import javax.sql.DataSource;
+import java.lang.reflect.Field;
+import java.sql.BatchUpdateException;
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.Driver;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Types;
+import java.util.List;
+import java.util.Properties;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import static org.hamcrest.core.StringContains.containsString;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+import static org.junit.Assert.assertThat;
+import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
+import static org.mockito.AdditionalMatchers.aryEq;
+import static org.mockito.AdditionalMatchers.or;
+import static org.mockito.Matchers.any;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Matchers.eq;
+import static org.mockito.Matchers.same;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.spy;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 @SuppressWarnings( "deprecation" )
 public class DatabaseTest {
@@ -959,5 +964,58 @@ public class DatabaseTest {
     verify( db, times( 1 ) ).getTableFieldsMetaByDbMeta( any(), any() );
   }
 
+  @Test
+  public void concurrentValueMetaModification() throws Exception {
+    AtomicBoolean stopMod = new AtomicBoolean();
+    Runnable mod = () -> {
+      while (!stopMod.get()) {
+        final PluginRegistry reg = PluginRegistry.getInstance();
+        final PluginInterface plugin = reg.getPlugin( ValueMetaPluginType.class, "10" ); // Timestamp type
+        try {
+          reg.registerPlugin( ValueMetaPluginType.class, plugin );
+        } catch ( KettlePluginException e ) {
+          throw new RuntimeException( e );
+        }
+      }
+    };
+    new Thread(mod).start();
 
+    DatabaseMeta meta = new DatabaseMeta();
+    final Database db = spy( new Database( log, meta ) );
+    db.setConnection( conn );
+
+    final Statement stm = mock( Statement.class );
+    when( conn.createStatement() ).thenReturn( stm );
+    when( stm.executeQuery( any( String.class ) ) ).thenReturn( rs );
+    when( rs.getMetaData() ).thenReturn( rsMetaData );
+    when( rsMetaData.getColumnCount() ).thenReturn( 2 );
+
+    // id BIGSERIAL, SQL type: BIGINT
+    when( rsMetaData.getColumnLabel( 1 ) ).thenReturn( "id_directory" );
+    when( rsMetaData.getColumnType( 1 ) ).thenReturn( Types.BIGINT );
+    when( rsMetaData.isSigned( 1 ) ).thenReturn( true );
+    when( rsMetaData.getColumnTypeName( 1 ) ).thenReturn( "bigserial" );
+    when( rsMetaData.getPrecision( 1 ) ).thenReturn( 19 );
+
+    // log_date TIMESTAMP, SQL type: TIMESTAMP
+    when( rsMetaData.getColumnLabel( 2 ) ).thenReturn( "log_date" );
+    when( rsMetaData.getColumnType( 2 ) ).thenReturn( Types.TIMESTAMP );
+    when( rsMetaData.isSigned( 2 ) ).thenReturn( false );
+    when( rsMetaData.getColumnTypeName( 2 ) ).thenReturn( "timestamp" );
+    when( rsMetaData.getPrecision( 2 ) ).thenReturn( 29 );
+    when( rsMetaData.getScale( 2 ) ).thenReturn( 6 );
+    
+    int i = 0;
+    try {
+      while ( i < 5000 ) {
+        assertNotNull( db.openQuery( sql ) );
+        assertEquals( db.getReturnRowMeta().getValueMeta( 0 ).getType(), ValueMetaInterface.TYPE_INTEGER );
+        assertEquals( db.getReturnRowMeta().getValueMeta( 1 ).getType(), ValueMetaInterface.TYPE_TIMESTAMP );
+        i++;
+      }
+    } finally {
+      System.out.println( "Finished iteration: #" + i );
+      stopMod.set( true );
+    }
+  }
 }

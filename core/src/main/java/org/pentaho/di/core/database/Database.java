@@ -3,7 +3,7 @@
  *
  * Pentaho Data Integration
  *
- * Copyright (C) 2002-2022 by Hitachi Vantara : http://www.pentaho.com
+ * Copyright (C) 2002-2023 by Hitachi Vantara : http://www.pentaho.com
  *
  *******************************************************************************
  *
@@ -203,9 +203,10 @@ public class Database implements VariableSpace, LoggingObjectInterface, Closeabl
 
   private static void initValueMetaPluginClasses() {
     try {
-      valueMetaPluginClasses = ValueMetaFactory.getValueMetaPluginClasses();
+      final List<ValueMetaInterface> valueMetaPluginClasses = ValueMetaFactory.getValueMetaPluginClasses();
       // Reverse the sort list
       valueMetaPluginClasses.sort( ( o1, o2 ) -> ( Integer.compare( o1.getType(), o2.getType() ) ) * -1 );
+      Database.valueMetaPluginClasses = valueMetaPluginClasses;
     } catch ( Exception e ) {
       throw new IllegalStateException( "Unable to get list of instantiated value meta plugin classes", e );
     }
