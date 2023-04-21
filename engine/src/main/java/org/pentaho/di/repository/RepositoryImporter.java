@@ -22,24 +22,10 @@
 
 package org.pentaho.di.repository;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
-
-import javax.xml.parsers.DocumentBuilder;
-
 import org.pentaho.di.base.AbstractMeta;
 import org.pentaho.di.cluster.ClusterSchema;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.Const;
-import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.core.ObjectLocationSpecificationMethod;
 import org.pentaho.di.core.Props;
 import org.pentaho.di.core.database.DatabaseMeta;
@@ -53,6 +39,7 @@ import org.pentaho.di.core.gui.SpoonFactory;
 import org.pentaho.di.core.logging.LogChannel;
 import org.pentaho.di.core.logging.LogChannelInterface;
 import org.pentaho.di.core.util.StringUtil;
+import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.core.xml.XMLHandler;
 import org.pentaho.di.i18n.BaseMessages;
 import org.pentaho.di.imp.ImportRules;
@@ -69,6 +56,18 @@ import org.pentaho.di.trans.step.StepMetaInterface;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXParseException;
+
+import javax.xml.parsers.DocumentBuilder;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+import java.util.Set;
 
 public class RepositoryImporter implements IRepositoryImporter, CanLimitDirs {
   public static final String IMPORT_ASK_ABOUT_REPLACE_DB = "IMPORT_ASK_ABOUT_REPLACE_DB";
@@ -837,7 +836,7 @@ public class RepositoryImporter implements IRepositoryImporter, CanLimitDirs {
   private DocumentBuilder documentBuilder;
 
   JobMeta createJobMetaForNode( Node jobnode ) throws KettleXMLException {
-    return new JobMeta( jobnode, getRep(), false, SpoonFactory.getInstance() );
+    return new JobMeta( jobnode, getRep(), true, SpoonFactory.getInstance() );
   }
 
   private DocumentBuilder getOrCreateDb() throws KettleXMLException {
