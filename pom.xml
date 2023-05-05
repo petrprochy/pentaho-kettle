@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>org.pentaho.di</groupId>
   <artifactId>pdi</artifactId>
-  <version>9.4.0.0-343-1-SNAPSHOT</version>
+  <version>9.4.0.0-343-1</version>
   <packaging>pom</packaging>
 
   <name>Pentaho Data Integration</name>
@@ -21,7 +19,7 @@
 
   <scm>
     <developerConnection>scm:git:https://github.com/petrprochy/pentaho-kettle.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>pdi-9.4.0.0-343-1</tag>
   </scm>
 
   <licenses>
@@ -35,13 +33,13 @@
       <name>GNU Lesser General Public License, Version 2.1</name>
       <url>https://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt</url>
       <distribution>repo</distribution>
-      <comments></comments>
+      <comments />
     </license>
     <license>
       <name>GNU Lesser General Public License, Version 3.0</name>
       <url>https://www.gnu.org/licenses/lgpl-3.0.txt</url>
       <distribution>repo</distribution>
-      <comments></comments>
+      <comments />
     </license>
   </licenses>
 
