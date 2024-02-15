@@ -4,7 +4,7 @@
 
   <groupId>org.pentaho.di</groupId>
   <artifactId>pentaho-kettle-utilities</artifactId>
-  <version>9.4.0.0-343-2-SNAPSHOT</version>
+  <version>9.4.0.0-343-2</version>
   <packaging>pom</packaging>
 
   <name>Pentaho Kettle Utilities</name>
@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.pentaho.di</groupId>
     <artifactId>pdi</artifactId>
-    <version>9.4.0.0-343-2-SNAPSHOT</version>
+    <version>9.4.0.0-343-2</version>
   </parent>
 
   <modules>
