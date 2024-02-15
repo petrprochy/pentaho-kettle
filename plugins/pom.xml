@@ -4,7 +4,7 @@
 
   <groupId>org.pentaho.di.plugins</groupId>
   <artifactId>pdi-plugins</artifactId>
-  <version>9.4.0.0-343-2</version>
+  <version>9.4.0.0-343-3-SNAPSHOT</version>
   <packaging>pom</packaging>
 
   <name>PDI Plugins</name>
@@ -12,7 +12,7 @@
   <parent>
     <groupId>org.pentaho.di</groupId>
     <artifactId>pdi</artifactId>
-    <version>9.4.0.0-343-2</version>
+    <version>9.4.0.0-343-3-SNAPSHOT</version>
   </parent>
 
   <properties>

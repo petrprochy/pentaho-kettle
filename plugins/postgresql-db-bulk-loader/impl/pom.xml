@@ -5,7 +5,7 @@
   <parent>
     <groupId>org.pentaho.di.plugins</groupId>
     <artifactId>postgresql-db-bulk-loader</artifactId>
-    <version>9.4.0.0-343-2</version>
+    <version>9.4.0.0-343-3-SNAPSHOT</version>
   </parent>
 
   <artifactId>postgresql-db-bulk-loader-plugins-impl</artifactId>
