@@ -75,7 +75,7 @@ public class JobEntryDeleteFilesTest {
 
   // Temporary folders
   private static final String[] FIRST_LEVEL_FOLDERS = new String[] { "aa1", "aa2", "aa 3" };
-  private static final String[] SECOND_LEVEL_FOLDERS = new String[] { "bb1", "bb2", "bb 3" };
+  private static final String[] SECOND_LEVEL_FOLDERS = new String[] { "bb1", "bb2", "bb 3", "Příliš žluťoučký kůň" };
   private static final int TOTAL_NUMBER_OF_FOLDERS_NO_ROOT = FIRST_LEVEL_FOLDERS.length // First level folders
     + ( FIRST_LEVEL_FOLDERS.length * SECOND_LEVEL_FOLDERS.length ); // Second level folders
   private static final int TOTAL_NUMBER_OF_FOLDERS_WITH_ROOT = TOTAL_NUMBER_OF_FOLDERS_NO_ROOT + 1;

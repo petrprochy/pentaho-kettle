@@ -24,36 +24,23 @@ package org.pentaho.di.job.entries.deletefiles;
 
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.provider.local.LocalFile;
-import org.pentaho.di.core.exception.KettleValueException;
-import org.pentaho.di.job.entry.validator.AbstractFileValidator;
-import org.pentaho.di.job.entry.validator.AndValidator;
-import org.pentaho.di.job.entry.validator.JobEntryValidatorUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSelectInfo;
 import org.apache.commons.vfs2.FileSelector;
+import org.apache.commons.vfs2.FileSystemException;
 import org.apache.commons.vfs2.FileType;
+import org.apache.commons.vfs2.provider.local.LocalFile;
 import org.pentaho.di.cluster.SlaveServer;
 import org.pentaho.di.core.CheckResultInterface;
 import org.pentaho.di.core.Const;
-import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.core.Result;
 import org.pentaho.di.core.RowMetaAndData;
 import org.pentaho.di.core.database.DatabaseMeta;
 import org.pentaho.di.core.exception.KettleDatabaseException;
 import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.exception.KettleValueException;
 import org.pentaho.di.core.exception.KettleXMLException;
+import org.pentaho.di.core.util.Utils;
 import org.pentaho.di.core.variables.VariableSpace;
 import org.pentaho.di.core.vfs.KettleVFS;
 import org.pentaho.di.core.xml.XMLHandler;
@@ -62,6 +49,9 @@ import org.pentaho.di.job.Job;
 import org.pentaho.di.job.JobMeta;
 import org.pentaho.di.job.entry.JobEntryBase;
 import org.pentaho.di.job.entry.JobEntryInterface;
+import org.pentaho.di.job.entry.validator.AbstractFileValidator;
+import org.pentaho.di.job.entry.validator.AndValidator;
+import org.pentaho.di.job.entry.validator.JobEntryValidatorUtils;
 import org.pentaho.di.job.entry.validator.ValidatorContext;
 import org.pentaho.di.repository.ObjectId;
 import org.pentaho.di.repository.Repository;
@@ -70,6 +60,15 @@ import org.pentaho.di.resource.ResourceEntry.ResourceType;
 import org.pentaho.di.resource.ResourceReference;
 import org.pentaho.metastore.api.IMetaStore;
 import org.w3c.dom.Node;
+
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * This defines a 'delete files' job entry.
@@ -411,7 +410,15 @@ public class JobEntryDeleteFiles extends JobEntryBase implements Cloneable, JobE
       try {
         if ( fileObject instanceof LocalFile ) {
           // fileObject.isReadable wrongly returns true in windows file system even if not readable
-          return Files.isReadable( fileObject.getPath().toAbsolutePath() );
+          Path path;
+          try {
+            path = fileObject.getPath();
+          } catch ( IllegalArgumentException e ) {
+            // Accent char in path throws "Bad escape" on Unix systems -> fallback with local file path
+            path = new File( fileObject.getName().getPath() ).toPath();
+          }
+          return Files.isReadable( path.toAbsolutePath() );
+//          return Files.isReadable( Paths.get( fileObject.getName().getPath() ) );
         }
         return fileObject.isReadable();
       } catch ( FileSystemException e ) {
