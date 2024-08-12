@@ -5,14 +5,14 @@
   <groupId>pentaho-kettle</groupId>
   <artifactId>kettle-ui-swt</artifactId>
   <packaging>jar</packaging>
-  <version>9.4.0.0-343-3</version>
+  <version>9.4.0.0-343-4-SNAPSHOT</version>
 
   <name>PDI User Interface</name>
 
   <parent>
     <groupId>org.pentaho.di</groupId>
     <artifactId>pdi</artifactId>
-    <version>9.4.0.0-343-3</version>
+    <version>9.4.0.0-343-4-SNAPSHOT</version>
   </parent>
 
   <properties>
