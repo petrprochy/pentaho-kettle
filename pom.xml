@@ -4,7 +4,7 @@
 
   <groupId>org.pentaho.di</groupId>
   <artifactId>pdi</artifactId>
-  <version>9.4.0.0-343-3-SNAPSHOT</version>
+  <version>9.4.0.0-343-3</version>
   <packaging>pom</packaging>
 
   <name>Pentaho Data Integration</name>
@@ -19,7 +19,7 @@
 
   <scm>
     <developerConnection>scm:git:https://github.com/petrprochy/pentaho-kettle.git</developerConnection>
-    <tag>HEAD</tag>
+    <tag>pdi-9.4.0.0-343-3</tag>
   </scm>
 
   <licenses>

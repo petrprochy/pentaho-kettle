@@ -5,12 +5,12 @@
   <parent>
     <groupId>org.pentaho.di</groupId>
     <artifactId>importer-utility-parent-pom</artifactId>
-    <version>9.4.0.0-343-3-SNAPSHOT</version>
+    <version>9.4.0.0-343-3</version>
   </parent>
 
   <groupId>org.pentaho.di</groupId>
   <artifactId>importer-utility</artifactId>
-  <version>9.4.0.0-343-3-SNAPSHOT</version>
+  <version>9.4.0.0-343-3</version>
 
   <build>
     <plugins>
