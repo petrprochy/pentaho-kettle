@@ -23,16 +23,6 @@
 
 package org.pentaho.di.ui.core.widget;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashSet;
-import java.util.Hashtable;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.custom.CCombo;
@@ -102,6 +92,16 @@ import org.pentaho.di.ui.core.PropsUI;
 import org.pentaho.di.ui.core.dialog.EnterConditionDialog;
 import org.pentaho.di.ui.core.dialog.ErrorDialog;
 import org.pentaho.di.ui.core.gui.GUIResource;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Widget to display or modify data, displayed in a Table format.
@@ -1814,16 +1814,16 @@ public class TableView extends Composite {
   }
 
   private String getSelectedText() {
-    String selection = "";
+    StringBuilder selection = new StringBuilder(1024);
 
     for ( int c = 1; c < table.getColumnCount(); c++ ) {
       TableColumn tc = table.getColumn( c );
       if ( c > 1 ) {
-        selection += CLIPBOARD_DELIMITER;
+        selection.append( CLIPBOARD_DELIMITER );
       }
-      selection += tc.getText();
+      selection.append( tc.getText() );
     }
-    selection += Const.CR;
+    selection.append( Const.CR );
 
     TableItem[] items = table.getSelection();
     if ( items.length == 0 ) {
@@ -1834,13 +1834,13 @@ public class TableView extends Composite {
       TableItem ti = items[r];
       for ( int c = 1; c < table.getColumnCount(); c++ ) {
         if ( c > 1 ) {
-          selection += CLIPBOARD_DELIMITER;
+          selection.append( CLIPBOARD_DELIMITER );
         }
-        selection += ti.getText( c );
+        selection.append( ti.getText( c ) );
       }
-      selection += Const.CR;
+      selection.append( Const.CR );
     }
-    return selection;
+    return selection.toString();
   }
 
   /*
