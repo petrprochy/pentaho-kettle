@@ -804,7 +804,10 @@ public class DimensionLookupMeta extends BaseStepMeta implements StepMetaInterfa
         if ( databaseMeta != null ) {
           db = createDatabaseObject();
 
-          RowMetaInterface extraFields = getDatabaseTableFields( db, schemaName, tableName );
+          RowMetaInterface extraFields = getDatabaseTableFields( db,
+              space.environmentSubstitute( schemaName ),
+              space.environmentSubstitute( tableName )
+            );
 
           for ( int i = 0; i < fieldLookup.length; i++ ) {
             v = extraFields.searchValueMeta( fieldLookup[i] );
