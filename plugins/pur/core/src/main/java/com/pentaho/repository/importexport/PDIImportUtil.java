@@ -16,12 +16,16 @@
  */
 package com.pentaho.repository.importexport;
 
-import java.io.ByteArrayInputStream;
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringWriter;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.pentaho.di.core.exception.KettleException;
+import org.pentaho.di.core.logging.LogChannel;
+import org.pentaho.di.core.logging.LogChannelInterface;
+import org.pentaho.di.core.xml.XMLParserFactoryProducer;
+import org.pentaho.di.repository.Repository;
+import org.pentaho.di.repository.utils.IRepositoryFactory;
+import org.w3c.dom.Document;
+import org.xml.sax.SAXException;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -34,16 +38,12 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
-
-import org.apache.commons.io.IOUtils;
-import org.pentaho.di.core.exception.KettleException;
-import org.pentaho.di.core.logging.LogChannel;
-import org.pentaho.di.core.logging.LogChannelInterface;
-import org.pentaho.di.core.xml.XMLParserFactoryProducer;
-import org.pentaho.di.repository.Repository;
-import org.pentaho.di.repository.utils.IRepositoryFactory;
-import org.w3c.dom.Document;
-import org.xml.sax.SAXException;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringWriter;
 
 public class PDIImportUtil {
 
@@ -87,22 +87,21 @@ public class PDIImportUtil {
     } catch ( ParserConfigurationException ex ) {
       // ignore
     }
+    File file = null;
     try {
-      File file = File.createTempFile( "tempFile", "temp" );
+      file = File.createTempFile( "pdiFile", "temp" );
       file.deleteOnExit();
       FileOutputStream fous = new FileOutputStream( file );
       IOUtils.copy( is, fous );
       fous.flush();
       fous.close();
+      //noinspection DataFlowIssue
       doc = builder.parse( file );
     } catch ( IOException | SAXException e ) {
       log.logError( e.getLocalizedMessage() );
     } finally {
-      try {
-        is.close();
-      } catch ( IOException e ) {
-        // nothing to do here
-      }
+      IOUtils.closeQuietly( is );
+      FileUtils.deleteQuietly( file );
     }
     return doc;
   }
