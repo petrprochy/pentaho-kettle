@@ -90,8 +90,8 @@
         <version>${commons-xul.version}</version>
         <exclusions>
           <exclusion>
-            <groupId>org.eclipse.swt</groupId>
-            <artifactId>*</artifactId>
+            <groupId>org.eclipse.platform</groupId>
+            <artifactId>org.eclipse.swt</artifactId>
           </exclusion>
         </exclusions>
       </dependency>

@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd" xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
   <parent>
     <groupId>org.pentaho.di.plugins</groupId>
     <artifactId>pur</artifactId>
-    <version>9.4.0.0-343</version>
+    <version>9.4.0.0-343-6-SNAPSHOT</version>
   </parent>
 
   <artifactId>repository-proxy</artifactId>
@@ -22,7 +21,7 @@
     <metastore.version>9.4.0.0-343</metastore.version>
     <platform.version>9.4.0.0-343</platform.version>
     <pentaho-osgi-bundles.version>9.4.0.0-343</pentaho-osgi-bundles.version>
-    <pdi-pur-plugin.version>9.4.0.0-343</pdi-pur-plugin.version>
+    <pdi-pur-plugin.version>9.4.0.0-343-6-SNAPSHOT</pdi-pur-plugin.version>
     <junit.version>4.11</junit.version>
     <mockito-core.version>1.9.5</mockito-core.version>
   </properties>
@@ -59,7 +58,7 @@
     <dependency>
       <groupId>org.pentaho.di.plugins</groupId>
       <artifactId>pentaho-kettle-repository-locator-api</artifactId>
-      <version>${project.version}</version>
+      <version>${platform.version}</version>
       <scope>provided</scope>
     </dependency>
 

@@ -98,6 +98,7 @@
       <modules>
         <module>pentaho-reporting</module>
         <module>postgresql-db-bulk-loader</module>
+        <module>pur</module>
       </modules>
     </profile>
   </profiles>
