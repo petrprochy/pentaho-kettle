@@ -16,16 +16,8 @@
  */
 package com.pentaho.repository.importexport;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.Serializable;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
-
 import com.google.common.annotations.VisibleForTesting;
+import org.apache.commons.io.input.CountingInputStream;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -42,13 +34,21 @@ import org.pentaho.di.repository.StringObjectId;
 import org.pentaho.di.repository.pur.JobDelegate;
 import org.pentaho.di.ui.job.entries.missing.MissingEntryDialog;
 import org.pentaho.platform.api.repository2.unified.Converter;
+import org.pentaho.platform.api.repository2.unified.ConverterException;
 import org.pentaho.platform.api.repository2.unified.IRepositoryFileData;
 import org.pentaho.platform.api.repository2.unified.IUnifiedRepository;
 import org.pentaho.platform.api.repository2.unified.RepositoryFile;
-import org.pentaho.platform.api.repository2.unified.ConverterException;
 import org.pentaho.platform.api.repository2.unified.data.node.NodeRepositoryFileData;
 import org.pentaho.platform.api.repository2.unified.data.simple.SimpleRepositoryFileData;
 import org.w3c.dom.Document;
+
+import java.io.ByteArrayInputStream;
+import java.io.InputStream;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Converts stream of binary or character data.
@@ -146,10 +146,10 @@ public class StreamToJobNodeConverter implements Converter {
    */
   public IRepositoryFileData convert( final InputStream inputStream, final String charset, final String mimeType ) {
     try {
-      long size = inputStream.available();
+      final CountingInputStream cis = new CountingInputStream( inputStream );
       JobMeta jobMeta = new JobMeta();
       Repository repository = connectToRepository();
-      Document doc = PDIImportUtil.loadXMLFrom( inputStream );
+      Document doc = PDIImportUtil.loadXMLFrom( cis );
       if ( doc != null ) {
         jobMeta.loadXML( doc.getDocumentElement(), repository, null );
         if ( jobMeta.hasMissingPlugins() ) {
@@ -160,11 +160,11 @@ public class StreamToJobNodeConverter implements Converter {
         }
         JobDelegate delegate = new JobDelegate( repository, this.unifiedRepository );
         delegate.saveSharedObjects( jobMeta, null );
-        return new NodeRepositoryFileData( delegate.elementToDataNode( jobMeta ), size );
+        return new NodeRepositoryFileData( delegate.elementToDataNode( jobMeta ), cis.getCount() );
       } else {
         return null;
       }
-    } catch ( IOException | KettleException e ) {
+    } catch ( KettleException e ) {
       return null;
     }
   }
