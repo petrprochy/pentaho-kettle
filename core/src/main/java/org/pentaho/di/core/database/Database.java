@@ -448,6 +448,7 @@ public class Database implements VariableSpace, LoggingObjectInterface, Closeabl
 
       if ( databaseMeta.getAccessType() == DatabaseMeta.TYPE_ACCESS_JNDI ) {
         String jndiName = environmentSubstitute( databaseMeta.getDatabaseName() );
+        invalidateMetaIfNeeded( dsp );
         try {
           this.connection = dsp.getNamedDataSource( jndiName, DatasourceType.JNDI ).getConnection();
         } catch ( DataSourceNamingException e ) {
@@ -456,11 +457,7 @@ public class Database implements VariableSpace, LoggingObjectInterface, Closeabl
         }
       } else {
         if ( databaseMeta.isUsingConnectionPool() ) {
-          String name = databaseMeta.getName();
-          if ( databaseMeta.isNeedUpdate() ) {
-            dsp.invalidateNamedDataSource( name, DatasourceType.POOLED );
-            databaseMeta.setNeedUpdate( false );
-          }
+          final String name = invalidateMetaIfNeeded( dsp );
           try {
             try {
               this.connection = dsp.getPooledDataSourceFromMeta( databaseMeta, DatasourceType.POOLED ).getConnection();
@@ -497,6 +494,15 @@ public class Database implements VariableSpace, LoggingObjectInterface, Closeabl
     } catch ( Exception e ) {
       throw new KettleDatabaseException( "Error occurred while trying to connect to the database", e );
     }
+  }
+
+  private String invalidateMetaIfNeeded( DataSourceProviderInterface dsp ) throws DataSourceNamingException {
+    final String name = databaseMeta.getName();
+    if ( databaseMeta.isNeedUpdate() ) {
+      dsp.invalidateNamedDataSource( name, DatasourceType.POOLED );
+      databaseMeta.setNeedUpdate( false );
+    }
+    return name;
   }
 
   /**
