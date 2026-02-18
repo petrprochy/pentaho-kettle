@@ -15,9 +15,6 @@
   </parent>
 
   <properties>
-    <!-- Kettle dependencies -->
-    <pdi.version>9.4.0.0-343</pdi.version>
-
     <!-- Pentaho dependenceis -->
     <platform.version>9.4.0.0-343</platform.version>
     <pentaho-json.version>9.4.0.0-343</pentaho-json.version>
@@ -48,19 +45,19 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-core</artifactId>
-      <version>${pdi.version}</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-engine</artifactId>
-      <version>${pdi.version}</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-ui-swt</artifactId>
-      <version>${pdi.version}</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
 
@@ -257,14 +254,14 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-engine</artifactId>
-      <version>${pdi.version}</version>
+      <version>${project.version}</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-core</artifactId>
-      <version>${pdi.version}</version>
+      <version>${project.version}</version>
       <classifier>tests</classifier>
       <scope>test</scope>
     </dependency>

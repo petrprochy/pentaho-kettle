@@ -16,12 +16,9 @@
 
 
   <properties>
-    <!-- Kettle dependencies -->
-    <pdi.version>9.4.0.0-343</pdi.version>
     <metastore.version>9.4.0.0-343</metastore.version>
     <platform.version>9.4.0.0-343</platform.version>
     <pentaho-osgi-bundles.version>9.4.0.0-343</pentaho-osgi-bundles.version>
-    <pdi-pur-plugin.version>9.4.0.0-343-6-SNAPSHOT</pdi-pur-plugin.version>
     <junit.version>4.11</junit.version>
     <mockito-core.version>1.9.5</mockito-core.version>
   </properties>
@@ -30,13 +27,13 @@
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-core</artifactId>
-      <version>${pdi.version}</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>pentaho-kettle</groupId>
       <artifactId>kettle-engine</artifactId>
-      <version>${pdi.version}</version>
+      <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -71,7 +68,7 @@
     <dependency>
       <groupId>org.pentaho.di.plugins</groupId>
       <artifactId>pdi-pur-plugin-core</artifactId>
-      <version>${pdi-pur-plugin.version}</version>
+      <version>${project.version}</version>
       <scope>test</scope>
     </dependency>
     <dependency>
