@@ -5,11 +5,11 @@
   <parent>
     <groupId>org.pentaho.di.plugins</groupId>
     <artifactId>pentaho-reporting-assemblies</artifactId>
-    <version>9.4.0.0-343-6-SNAPSHOT</version>
+    <version>9.4.0.0-343-6</version>
   </parent>
 
   <artifactId>pentaho-reporting-plugins</artifactId>
-  <version>9.4.0.0-343-6-SNAPSHOT</version>
+  <version>9.4.0.0-343-6</version>
   <packaging>pom</packaging>
 
   <name>PDI Pentaho Reporting Plugins Distribution</name>
